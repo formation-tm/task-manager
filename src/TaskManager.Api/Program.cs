@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer(); // Nécessaire pour détecter les endpoints
+builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<MyScopedService>();
 builder.Services.AddSingleton<MySingletonService>();
 builder.Services.AddDbContext<AppDbContext>(o =>
@@ -19,6 +21,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseSwagger();
+    app.UseSwaggerUI(); // Génère l'interface graphique
     app.MapOpenApi();
 }
 
