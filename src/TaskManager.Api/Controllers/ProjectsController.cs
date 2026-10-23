@@ -82,5 +82,26 @@ namespace TaskManager.Api.Controllers
             await context.SaveChangesAsync();
             return NoContent();
         }
+
+        [HttpGet("{id:int}/details")]
+        public async Task<ActionResult<ProjectDetailsDto>> GetProjectDetails(int id)
+        {
+            var project = await context.Projects
+                .AsNoTracking()
+                .Where(p => p.Id == id)
+                .Select(p => new ProjectDetailsDto(
+                    p.Id,
+                    p.Name,
+                    p.Description,
+                    p.OwnerId,
+                    p.Tasks.Select(t => new TaskItemDto(t.Id, t.Title, t.Status, t.DueDate, t.ProjectId)).ToList()
+                ))
+                .FirstOrDefaultAsync();
+            if (project is null)
+            {
+                return NotFound();
+            }
+            return project;
+        }
     }
 }

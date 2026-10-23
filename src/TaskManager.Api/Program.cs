@@ -13,9 +13,11 @@ builder.Services.AddEndpointsApiExplorer(); // Nécessaire pour détecter les endp
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<MyScopedService>();
 builder.Services.AddSingleton<MySingletonService>();
-builder.Services.AddDbContext<AppDbContext>(o =>
-    o.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
+builder.Services.AddDbContext<AppDbContext>(o =>
+    o.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
+     .LogTo(Console.WriteLine, LogLevel.Information)
+     .EnableSensitiveDataLogging());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
